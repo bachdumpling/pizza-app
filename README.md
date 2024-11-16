@@ -44,4 +44,4 @@ You're encouraged to take this project in a direction of your choice while meeti
 
 ## Submission Requirements
 - Deploy your React app in a hosted environment of your choice.
-- Share the link to your GitHub repository with the source code for the project.
+- Share the link to your GitHub repository with the source code for the project.# sparrow-pizza-app
