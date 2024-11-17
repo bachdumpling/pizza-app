@@ -1,10 +1,7 @@
 import {
   HiringFrontendTakeHomePizzaSize,
-  HiringFrontendTakeHomePizzaToppings,
   HiringFrontendTakeHomePizzaType,
-  HiringFrontendTakeHomeToppingQuantity,
   OrderItem,
-  PizzaTopping,
   SpecialtyPizza,
 } from "@/types";
 import {

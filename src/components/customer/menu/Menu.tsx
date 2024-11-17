@@ -2,8 +2,9 @@ import { pizzaApi } from "@/hooks/usePizzaApi";
 import { SpecialtyPizza } from "@/types";
 import { useEffect, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../ui/tabs";
-import PizzaCard from "./PizzaCard";
+import PizzaCard from "../specialty/PizzaCard";
 import { GetPizzaPricingResponse } from "@/types/api";
+import CustomPizzaBuilder from "../custom/CustomPizzaBuilder";
 
 function Menu() {
   const [specialtyPizzas, setSpecialtyPizzas] = useState<SpecialtyPizza[]>([]);
@@ -41,6 +42,9 @@ function Menu() {
         </TabsContent>
 
         {/* Custom Pizzas */}
+        <TabsContent value="custom">
+          {pricing && <CustomPizzaBuilder pricing={pricing} />}
+        </TabsContent>
       </Tabs>
     </div>
   );

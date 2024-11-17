@@ -14,15 +14,19 @@ function Cart() {
     );
   }
 
-  function formatToppings(toppings: any): any {
-    const toppingCount = toppings.reduce((acc, topping) => {
-      acc[topping] = (acc[topping] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
+  function formatToppings(item: any, toppings: any): any {
+    if (item.pizza.type !== "custom") {
+      const toppingCount = toppings.reduce((acc, topping) => {
+        acc[topping] = (acc[topping] || 0) + 1;
+        return acc;
+      }, {} as Record<string, number>);
 
-    return Object.keys(toppingCount).map((topping) =>
-      toppingCount[topping] > 1 ? `Extra ${topping}` : topping
-    );
+      return Object.keys(toppingCount).map((topping) =>
+        toppingCount[topping] > 1 ? `extra ${topping}` : topping
+      );
+    } else {
+      return toppings.map((topping) => `${topping.quantity} ${topping.name}`);
+    }
   }
 
   return (
@@ -45,7 +49,7 @@ function Cart() {
                 <span className="text-sm text-gray-500">
                   {item.pizza.toppings && item.pizza.toppings.length > 0 && (
                     <span className="text-sm text-gray-500">
-                      {formatToppings(item.pizza.toppings).join(", ")}
+                      {formatToppings(item, item.pizza.toppings).join(", ")}
                     </span>
                   )}
                 </span>
