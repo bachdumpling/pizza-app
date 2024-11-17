@@ -2,7 +2,6 @@ import { useCart } from "@/contexts/CartContext";
 import { Card, CardContent, CardHeader } from "../ui/card";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { useState } from "react";
 
 function Cart() {
   const { items, removeFromCart, totalAmount, updateQuantity } = useCart();
@@ -15,9 +14,9 @@ function Cart() {
     );
   }
 
-  function formatToppings(toppings: string[]): string[] {
+  function formatToppings(toppings: { name: string }[]): string[] {
     const toppingCount = toppings.reduce((acc, topping) => {
-      acc[topping] = (acc[topping] || 0) + 1;
+      acc[topping.name] = (acc[topping.name] || 0) + 1;
       return acc;
     }, {} as Record<string, number>);
 
