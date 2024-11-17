@@ -1,7 +1,10 @@
 import {
   HiringFrontendTakeHomePizzaSize,
+  HiringFrontendTakeHomePizzaToppings,
   HiringFrontendTakeHomePizzaType,
+  HiringFrontendTakeHomeToppingQuantity,
   OrderItem,
+  PizzaTopping,
   SpecialtyPizza,
 } from "@/types";
 import {
@@ -21,12 +24,10 @@ import {
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { GetPizzaPricingResponse } from "@/types/api";
 import { useCart } from "@/contexts/CartContext";
 
 type PizzaCardProps = {
   pizza: SpecialtyPizza;
-  pricing: GetPizzaPricingResponse;
 };
 
 interface ToppingState {
@@ -63,33 +64,46 @@ function PizzaCard({ pizza }: PizzaCardProps): JSX.Element {
     );
   };
 
-  const getFinalToppings = (): any[] => {
-    return toppingsState.flatMap((topping) => {
-      // If topping is removed, return empty array
-      if (topping.count === 0) return [];
-      // If extra, return the topping twice
-      if (topping.count === 2) return [topping.name, topping.name];
-      // If regular, return once
-      return [topping.name];
-    });
+  const getToppingExclusions = (): HiringFrontendTakeHomePizzaToppings[] => {
+    return toppingsState
+      .filter((topping) => topping.count === 0)
+      .map((topping) => topping.name);
+  };
+
+  const getFinalToppings = (): PizzaTopping[] => {
+    return toppingsState
+      .filter((topping) => topping.count > 0)
+      .flatMap((topping) => {
+        // Convert count to quantity enum
+        const quantity =
+          topping.count === 2
+            ? HiringFrontendTakeHomeToppingQuantity.Extra
+            : HiringFrontendTakeHomeToppingQuantity.Regular;
+
+        return {
+          name: topping.name,
+          quantity,
+        };
+      });
   };
 
   const handleAddToCart = () => {
-    console.log("Adding to cart:", {
-      pizza,
-      toppings: getFinalToppings(),
-      size,
-      quantity,
-      totalPrice: pizza.price[size] * quantity,
-    });
+    // console.log("Adding to cart:", {
+    //   pizza,
+    //   toppings: getFinalToppings(),
+    //   toppingExclusions: getToppingExclusions(),
+    //   size,
+    //   quantity,
+    //   totalPrice: pizza.price[size] * quantity,
+    // });
 
     const orderItem: OrderItem = {
       id: crypto.randomUUID(),
       pizza: {
-        name: pizza.name,
         type: HiringFrontendTakeHomePizzaType.Specialty,
         size,
         toppings: getFinalToppings(),
+        toppingExclusions: getToppingExclusions(),
         quantity,
         totalPrice: pizza.price[size] * quantity,
       },

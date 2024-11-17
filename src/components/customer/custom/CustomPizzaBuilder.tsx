@@ -31,11 +31,11 @@ const CustomPizza: React.FC<CustomPizzaProps> = ({ pricing }) => {
   );
   const [quantity, setQuantity] = useState(1);
   const [toppings, setToppings] = useState<PizzaTopping[]>([]);
-
+  
   const calculatePrice = () => {
     if (!pricing) return 0;
 
-    let basePrice = pricing.size[size];
+    const basePrice = pricing.size[size];
     const toppingsPrice = toppings.reduce((total, topping) => {
       return total + pricing.toppingPrices[topping.name][topping.quantity];
     }, 0);
