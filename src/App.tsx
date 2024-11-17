@@ -1,15 +1,17 @@
-import { Button } from "./components/ui/button";
+import Menu from "./components/customer/menu/Menu";
 import "./index.css";
 
-function App() {
+export default function App() {
+
   return (
-    <div>
-      <p>Hello World</p>
-      <div>
-        <Button variant="outline">Click me</Button>
+    <div className="min-h-screen bg-gray-50 p-8">
+      <div className="max-w-4xl mx-auto">
+        {/* Title */}
+        <h1 className="text-3xl font-bold mb-8">Sparrow Pizza</h1>
+
+        {/* Menu */}
+        <Menu />
       </div>
     </div>
   );
 }
-
-export default App;

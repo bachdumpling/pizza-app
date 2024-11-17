@@ -29,12 +29,12 @@ export enum HiringFrontendTakeHomeToppingQuantity {
 }
 
 // Represents a single topping with its quantity
-type PizzaTopping = {
+export type PizzaTopping = {
   name: HiringFrontendTakeHomePizzaToppings;
   quantity: HiringFrontendTakeHomeToppingQuantity;
 };
 
-type Pizza = {
+export type Pizza = {
   type: HiringFrontendTakeHomePizzaType;
   size: HiringFrontendTakeHomePizzaSize;
   // For specialty pizzas, we only add extra toppings in the toppings array
@@ -46,7 +46,7 @@ type Pizza = {
   totalPrice: number;
 };
 
-type OrderItem = {
+export type OrderItem = {
   id: string;
   pizza: Pizza;
 };

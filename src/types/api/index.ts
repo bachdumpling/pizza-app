@@ -16,7 +16,7 @@ import {
 /**
  * Response type for pizza pricing endpoint
  */
-interface GetPizzaPricingResponse {
+export interface GetPizzaPricingResponse {
   size: Record<HiringFrontendTakeHomePizzaSize, number>;
   toppingPrices: Record<
     HiringFrontendTakeHomePizzaToppings,
