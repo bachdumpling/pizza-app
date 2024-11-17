@@ -1,17 +1,17 @@
-import Menu from "./components/customer/menu/Menu";
+import { BrowserRouter } from "react-router-dom";
+import { Layout } from "./components/Layout";
+import { CartProvider } from "./contexts/CartContext";
 import "./index.css";
+import Menu from "./components/customer/menu/Menu";
 
 export default function App() {
-
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
-      <div className="max-w-4xl mx-auto">
-        {/* Title */}
-        <h1 className="text-3xl font-bold mb-8">Sparrow Pizza</h1>
-
-        {/* Menu */}
-        <Menu />
-      </div>
-    </div>
+    <BrowserRouter>
+      <CartProvider>
+        <Layout>
+          <Menu />
+        </Layout>
+      </CartProvider>
+    </BrowserRouter>
   );
 }

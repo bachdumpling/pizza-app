@@ -35,6 +35,7 @@ export type PizzaTopping = {
 };
 
 export type Pizza = {
+  name: string;
   type: HiringFrontendTakeHomePizzaType;
   size: HiringFrontendTakeHomePizzaSize;
   // For specialty pizzas, we only add extra toppings in the toppings array

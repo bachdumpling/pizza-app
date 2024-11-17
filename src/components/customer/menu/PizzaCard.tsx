@@ -1,7 +1,9 @@
 import {
   HiringFrontendTakeHomePizzaSize,
   HiringFrontendTakeHomePizzaToppings,
+  HiringFrontendTakeHomePizzaType,
   HiringFrontendTakeHomeToppingQuantity,
+  OrderItem,
   PizzaTopping,
   SpecialtyPizza,
 } from "@/types";
@@ -22,8 +24,8 @@ import {
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { GetPizzaPricingResponse } from "@/types/api";
+import { useCart } from "@/contexts/CartContext";
 
 type PizzaCardProps = {
   pizza: SpecialtyPizza;
@@ -35,11 +37,13 @@ interface ToppingState {
   count: number; // 0 for removed, 1 for regular, 2 for extra
 }
 
-function PizzaCard({ pizza, pricing }: PizzaCardProps): JSX.Element {
+function PizzaCard({ pizza }: PizzaCardProps): JSX.Element {
+  const { addToCart } = useCart();
+
   const [size, setSize] = useState<HiringFrontendTakeHomePizzaSize>(
     HiringFrontendTakeHomePizzaSize.Medium
   );
-  const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState<number>(1);
 
   const [toppingsState, setToppingsState] = useState<ToppingState[]>(() =>
     pizza.toppings.map((topping) => ({
@@ -62,7 +66,7 @@ function PizzaCard({ pizza, pricing }: PizzaCardProps): JSX.Element {
     );
   };
 
-  const getFinalToppings = () => {
+  const getFinalToppings = (): any[] => {
     return toppingsState.flatMap((topping) => {
       // If topping is removed, return empty array
       if (topping.count === 0) return [];
@@ -81,10 +85,27 @@ function PizzaCard({ pizza, pricing }: PizzaCardProps): JSX.Element {
       quantity,
       totalPrice: pizza.price[size] * quantity,
     });
+
+    const orderItem: OrderItem = {
+      id: crypto.randomUUID(),
+      pizza: {
+        name: pizza.name,
+        type: HiringFrontendTakeHomePizzaType.Specialty,
+        size,
+        toppings: getFinalToppings(),
+        quantity,
+        totalPrice: pizza.price[size] * quantity,
+      },
+    };
+
+    addToCart(orderItem);
   };
 
   return (
-    <Card key={pizza.id} className="p-4 border border-gray-200 rounded-md">
+    <Card
+      key={pizza.id}
+      className="p-4 border border-gray-200 rounded-md flex flex-col justify-between h-full"
+    >
       {/* Pizza Name */}
       <CardHeader>
         <CardTitle>{pizza.name}</CardTitle>
@@ -92,7 +113,7 @@ function PizzaCard({ pizza, pricing }: PizzaCardProps): JSX.Element {
       </CardHeader>
 
       {/* Pizza Selection */}
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-4 ">
         {/* Toppings Management */}
         <div className="space-y-4">
           <h4 className="font-medium mb-2">Modify Toppings:</h4>
@@ -180,10 +201,11 @@ function PizzaCard({ pizza, pricing }: PizzaCardProps): JSX.Element {
         </div>
 
         {/* Price */}
-        <div className="text-lg font-semibold">
+        {/* <div className="text-lg font-semibold">
           Total: ${(pizza.price[size] * quantity).toFixed(2)}
-        </div>
-
+        </div> */}
+      </CardContent>
+      <CardContent className="">
         <Button onClick={handleAddToCart} className="w-full">
           Add to Cart
         </Button>
