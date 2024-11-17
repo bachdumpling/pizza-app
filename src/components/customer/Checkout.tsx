@@ -4,7 +4,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Input } from "../ui/input";
 import {
   Customer,
-  HiringFrontendTakeHomeOrderRequest,
   HiringFrontendTakeHomeOrderType,
   HiringFrontendTakeHomePaymentMethod,
 } from "@/types";
@@ -78,8 +77,11 @@ function Checkout() {
 
       // Wait for the response using await
       const response = await pizzaApi.createOrder(orderData);
+
+      console.log("Order created:", response);
+      
       clearCart();
-      // navigate(`/order-status/${response.id}`)
+      navigate(`/order-lookup/${response.id}`)
     } catch (error) {
       console.error("Error creating order:", error);
     }

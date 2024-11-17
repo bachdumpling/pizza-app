@@ -1,10 +1,10 @@
 import { pizzaApi } from "@/hooks/usePizzaApi";
 import { SpecialtyPizza } from "@/types";
 import { useEffect, useState } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../ui/tabs";
-import PizzaCard from "../specialty/PizzaCard";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
+import PizzaCard from "./PizzaCard";
 import { GetPizzaPricingResponse } from "@/types/api";
-import CustomPizzaBuilder from "../custom/CustomPizzaBuilder";
+import CustomPizzaBuilder from "./CustomPizzaBuilder";
 
 function Menu() {
   const [specialtyPizzas, setSpecialtyPizzas] = useState<SpecialtyPizza[]>([]);

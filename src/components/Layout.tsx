@@ -10,24 +10,30 @@ import { Button } from "@/components/ui/button";
 import { ShoppingCart } from "lucide-react";
 import { useCart } from "../contexts/CartContext";
 import Cart from "./customer/Cart";
-import { useNavigate } from "react-router";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const { items, totalAmount } = useCart();
-  const navigate = useNavigate();
-
-  function handleGoHome() {
-    navigate("/");
-  }
 
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="border-b bg-white">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <button className="text-xl font-bold" onClick={handleGoHome}>
+            <a href="/" className="text-xl font-bold">
               Sparrow Pizza Shop
-            </button>
+            </a>
+
+            {/* Nav */}
+            <nav>
+              <ul className="flex gap-4">
+                <li>
+                  <a href="/">Menu</a>
+                </li>
+                <li>
+                  <a href="/order-lookup">Order Lookup</a>
+                </li>
+              </ul>
+            </nav>
 
             {/* Cart Sheet */}
             <Sheet>

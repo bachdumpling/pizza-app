@@ -9,14 +9,14 @@ import {
 } from "@/types";
 import { GetPizzaPricingResponse } from "@/types/api";
 import { useCart } from "@/contexts/CartContext";
-import { Card, CardContent, CardHeader, CardTitle } from "../../ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../../ui/select";
+} from "../ui/select";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
