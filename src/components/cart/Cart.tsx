@@ -14,9 +14,9 @@ function Cart() {
     );
   }
 
-  function formatToppings(toppings: { name: string }[]): string[] {
+  function formatToppings(toppings: any): any {
     const toppingCount = toppings.reduce((acc, topping) => {
-      acc[topping.name] = (acc[topping.name] || 0) + 1;
+      acc[topping] = (acc[topping] || 0) + 1;
       return acc;
     }, {} as Record<string, number>);
 
