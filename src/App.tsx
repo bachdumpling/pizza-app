@@ -5,6 +5,7 @@ import "./index.css";
 import Menu from "./components/customer/Menu";
 import Checkout from "./components/customer/Checkout";
 import OrderLookup from "./components/customer/OrderLookup";
+import EmployeeDashboard from "./components/employee/EmployeeDashboard";
 
 export default function App() {
   return (
@@ -14,6 +15,9 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Menu />} />
             <Route path="/checkout" element={<Checkout />} />
+
+            <Route path="/dashboard" element={<EmployeeDashboard />} />
+
             <Route path="/order-lookup" element={<OrderLookup />} />
             <Route path="/order-status/:orderId" element={<OrderLookup />} />
           </Routes>

@@ -30,6 +30,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   <a href="/">Menu</a>
                 </li>
                 <li>
+                  <a href="/dashboard">Employee Dashboard</a>
+                </li>
+                <li>
                   <a href="/order-lookup">Order Lookup</a>
                 </li>
               </ul>

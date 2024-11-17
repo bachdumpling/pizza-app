@@ -1,6 +1,7 @@
 import {
   HiringFrontendTakeHomeOrderRequest,
   HiringFrontendTakeHomeOrderResponse,
+  HiringFrontendTakeHomeOrderStatus,
 } from "@/types";
 
 const BASE_URL = "https://api.sparrowtest.com/v2/lmd/hiring/frontend/take-home";
@@ -63,6 +64,43 @@ export const pizzaApi = {
 
     if (!response.ok) {
       throw new Error("Failed to cancel order");
+    }
+
+    return response.json();
+  },
+
+  async getAllOrders(locationId: string) {
+    const response = await fetch(
+      `${BASE_URL}/pizzas?locationId=${locationId}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch orders");
+    }
+
+    return response.json();
+  },
+  async updateOrderStatus(
+    orderId: string,
+    status: HiringFrontendTakeHomeOrderStatus
+  ) {
+    const response = await fetch(`${BASE_URL}/pizza/status`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ orderId, status }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.userDescription || "Failed to update status");
     }
 
     return response.json();

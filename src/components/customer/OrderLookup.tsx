@@ -63,22 +63,22 @@ function OrderLookup() {
             <div>
               <h4 className="font-medium">Order Details</h4>
               <p>
-                <span className="font-semibold">Order ID:</span> {order.id}
+                <span className="font-semibold">Order ID:</span> {order?.id}
               </p>
               <p>
-                <span className="font-semibold">Status:</span> {order.status}
+                <span className="font-semibold">Status:</span> {order?.status}
               </p>
               <p>
-                <span className="font-semibold">Type:</span> {order.type}
+                <span className="font-semibold">Type:</span> {order?.type}
               </p>
               <p>
                 <span className="font-semibold">Total Price:</span> $
-                {order.totalAmount}
+                {order?.totalAmount}
               </p>
             </div>
           )}
 
-          {order.status === "pending" && (
+          {order?.status === "pending" && (
             <div>
               <h4 className="font-medium">Order Actions</h4>
               <Button variant="destructive" onClick={handleCancelOrder}>
