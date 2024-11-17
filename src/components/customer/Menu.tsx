@@ -36,7 +36,7 @@ function Menu() {
         <TabsContent value="specialty">
           <div className="grid grid-cols-2 gap-4">
             {specialtyPizzas.map((pizza) => (
-              <PizzaCard key={pizza.id} pizza={pizza} pricing={pricing} />
+              <PizzaCard key={pizza.id} pizza={pizza} />
             ))}
           </div>
         </TabsContent>
