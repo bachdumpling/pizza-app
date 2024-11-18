@@ -72,7 +72,7 @@ function EmployeeDashboard() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto py-4">
+    <div className="max-w-6xl mx-auto py-4 bg-[#FFFFE4]">
       <Card className="border-4 border-yellow-400 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)]">
         <CardHeader className="rounded-t-lg bg-red-600 border-b-4 border-yellow-400">
           <CardTitle className="text-2xl font-rushford tracking-widest leading-none text-yellow-400 drop-shadow-[2px_2px_0px_rgba(0,0,0,0.3)]">

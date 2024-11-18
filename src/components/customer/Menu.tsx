@@ -9,6 +9,7 @@ import CustomPizzaBuilder from "./CustomPizzaBuilder";
 function Menu() {
   const [specialtyPizzas, setSpecialtyPizzas] = useState<SpecialtyPizza[]>([]);
   const [pricing, setPricing] = useState<GetPizzaPricingResponse>();
+  const [selectedGroup, setSelectedGroup] = useState<string>("all");
 
   useEffect(() => {
     pizzaApi.getSpecialtyPizzas().then((data) => {
@@ -21,8 +22,20 @@ function Menu() {
     });
   }, []);
 
+  // Get unique groups
+  const groups = [
+    "all",
+    ...new Set(specialtyPizzas.map((pizza) => pizza.group)),
+  ];
+
+  // Filter pizzas based on selected group
+  const filteredPizzas =
+    selectedGroup === "all"
+      ? specialtyPizzas
+      : specialtyPizzas.filter((pizza) => pizza.group === selectedGroup);
+
   return (
-    <div className="w-full min-h-screen p-4 bg-[#FFFFE4]">
+    <div className="w-full min-h-screen p-4 bg-[#FFFFE4] mb-10">
       <h2 className="text-4xl font-rushford tracking-widest leading-none font-bold text-center text-red-600 drop-shadow-[2px_2px_0px_rgba(0,0,0,0.3)] my-8">
         Our Menu 🍕
       </h2>
@@ -48,13 +61,29 @@ function Menu() {
         </TabsList>
 
         {/* Specialty Pizzas */}
-        <TabsContent
-          value="specialty"
-          className="max-w-5xl grid grid-cols-2 gap-10"
-        >
-          {specialtyPizzas.map((pizza) => (
-            <PizzaCard key={pizza.id} pizza={pizza} />
-          ))}
+        <TabsContent value="specialty" className="w-full">
+          <div className="flex justify-center mb-8 gap-4 flex-wrap">
+            {groups.map((group) => (
+              <button
+                key={group}
+                onClick={() => setSelectedGroup(group)}
+                className={`px-6 py-3 rounded-full font-bold text-lg transition-all transform hover:scale-105
+                  ${
+                    selectedGroup === group
+                      ? "bg-yellow-400 text-red-600 shadow-[4px_4px_0px_rgba(0,0,0,0.3)]"
+                      : "bg-red-100 text-red-600 hover:bg-red-200"
+                  }`}
+              >
+                {group.charAt(0).toUpperCase() + group.slice(1)}
+              </button>
+            ))}
+          </div>
+
+          <div className="max-w-5xl mx-auto grid grid-cols-2 gap-10">
+            {filteredPizzas.map((pizza) => (
+              <PizzaCard key={pizza.id} pizza={pizza} />
+            ))}
+          </div>
         </TabsContent>
 
         {/* Custom Pizzas */}

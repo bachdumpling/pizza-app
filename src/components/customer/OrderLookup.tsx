@@ -66,7 +66,7 @@ function OrderLookup() {
   };
 
   return (
-    <div className="w-full py-8 bg-red-50 min-h-screen">
+    <div className="w-full py-8">
       <Card className="max-w-2xl mx-auto border-4 border-yellow-400 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)]">
         <CardHeader className="rounded-t-lg bg-red-600 border-b-4 border-yellow-400">
           <CardTitle className="text-2xl font-rushford tracking-widest text-yellow-400 drop-shadow-[2px_2px_0px_rgba(0,0,0,0.3)]">

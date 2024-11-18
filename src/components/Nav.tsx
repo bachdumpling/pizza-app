@@ -80,7 +80,7 @@ function Nav() {
               </Button>
             </SheetTrigger>
 
-            <SheetContent>
+            <SheetContent className="bg-[#FFFFE4]">
               <SheetHeader>
                 <SheetTitle className="text-2xl  tracking-widest font-rushford leading-none text-red-600 mb-4">
                   Your Cart

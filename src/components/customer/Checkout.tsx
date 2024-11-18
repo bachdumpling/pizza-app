@@ -103,7 +103,7 @@ function Checkout() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto p-4">
+    <div className="max-w-2xl mx-auto p-4 mb-10">
       <h1 className="text-4xl font-black text-red-600 text-center mb-10 mt-4 drop-shadow-[2px_2px_0px_rgba(0,0,0,0.3)] tracking-wide uppercase transform -rotate-2">
         Ready to Order! 🍕
       </h1>

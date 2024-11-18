@@ -5,7 +5,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
     <div className="min-h-screen flex flex-col">
       <Nav />
 
-      <main className="flex-grow h-full flex flex-col">{children}</main>
+      <main className="flex-grow h-full flex flex-col bg-[#FFFFE4]">{children}</main>
 
       <footer className="py-6 text-center bg-red-600 backdrop-blur-sm">
         <p className="font-mono text-yellow-200">
