@@ -17,11 +17,7 @@ export const pizzaApi = {
     return response.json();
   },
 
-  async createOrder(
-    orderData: HiringFrontendTakeHomeOrderRequest
-  ): Promise<HiringFrontendTakeHomeOrderResponse> {
-    console.log("Order Request:", JSON.stringify(orderData, null, 2));
-
+  async createOrder(orderData: HiringFrontendTakeHomeOrderRequest) {
     const response = await fetch(`${BASE_URL}/pizza`, {
       method: "POST",
       headers: {

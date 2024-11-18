@@ -27,8 +27,9 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
+import { formatDate } from "@/lib/utils";
 
-const LOCATION_ID = "b-le";
+const LOCATION_ID = import.meta.env.VITE_LOCATION_ID;
 
 function EmployeeDashboard() {
   const [orders, setOrders] = useState<HiringFrontendTakeHomeOrderResponse[]>(
@@ -91,7 +92,9 @@ function EmployeeDashboard() {
     <div className="max-w-7xl mx-auto">
       <Card>
         <CardHeader>
-          <CardTitle>Employee Dashboard</CardTitle>
+          <CardTitle className="text-xl font-bold">
+            Employee Dashboard
+          </CardTitle>
           <CardDescription>View and update customers' orders</CardDescription>
         </CardHeader>
 
@@ -107,6 +110,7 @@ function EmployeeDashboard() {
                   <TableHead className="">Order ID</TableHead>
                   <TableHead>Customer</TableHead>
                   <TableHead>Amount</TableHead>
+                  <TableHead>Date Ordered</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Actions</TableHead>
                 </TableRow>
@@ -120,6 +124,8 @@ function EmployeeDashboard() {
                         {order.customer.firstName} {order.customer.lastName}
                       </TableCell>
                       <TableCell>{order.totalAmount}</TableCell>
+                      <TableCell>{formatDate(order.createdAt)}</TableCell>
+
                       <TableCell>
                         <span
                           className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(

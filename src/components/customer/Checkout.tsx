@@ -18,12 +18,11 @@ import { Button } from "../ui/button";
 import { pizzaApi } from "@/hooks/usePizzaApi";
 import { useNavigate } from "react-router";
 
-const LOCATION_ID = "b-le";
+const LOCATION_ID = import.meta.env.VITE_LOCATION_ID;
 
 function Checkout() {
   const navigate = useNavigate();
   const { items, totalAmount, clearCart } = useCart();
-  console.log("Items", items);
 
   const [orderType, setOrderType] = useState<HiringFrontendTakeHomeOrderType>(
     HiringFrontendTakeHomeOrderType.Delivery
@@ -78,10 +77,11 @@ function Checkout() {
       // Wait for the response using await
       const response = await pizzaApi.createOrder(orderData);
 
-      console.log("Order created:", response);
-      
       clearCart();
-      navigate(`/order-lookup/${response.id}`)
+
+      navigate(`/order-lookup/${response.order.id}`, {
+        state: { isConfirmation: true },
+      });
     } catch (error) {
       console.error("Error creating order:", error);
     }
@@ -93,7 +93,6 @@ function Checkout() {
       [e.target.name]: e.target.value,
     });
   }
-  // console.log("Form Data", formData);
 
   return (
     <div className="max-w-2xl mx-auto p-4">

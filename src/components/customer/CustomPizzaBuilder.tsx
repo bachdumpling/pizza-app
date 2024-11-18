@@ -31,7 +31,7 @@ const CustomPizza: React.FC<CustomPizzaProps> = ({ pricing }) => {
   );
   const [quantity, setQuantity] = useState(1);
   const [toppings, setToppings] = useState<PizzaTopping[]>([]);
-  
+
   const calculatePrice = () => {
     if (!pricing) return 0;
 
@@ -62,14 +62,6 @@ const CustomPizza: React.FC<CustomPizzaProps> = ({ pricing }) => {
   };
 
   const handleAddToCart = () => {
-    console.log("Adding to cart", {
-      name: "Custom Pizza",
-      type: HiringFrontendTakeHomePizzaType.Custom,
-      size,
-      quantity,
-      toppings,
-      totalPrice: calculatePrice(),
-    });
     const orderItem: OrderItem = {
       id: crypto.randomUUID(),
       pizza: {

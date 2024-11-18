@@ -22,27 +22,28 @@ function Menu() {
   }, []);
 
   return (
-    <div>
-      <h2>Menu</h2>
+    <div className="w-full">
+      <h2 className="text-xl font-bold text-center">Menu</h2>
 
       {/* Tabs for Specialty Pizzas & Custom Pizzas */}
-      <Tabs defaultValue="specialty" className="w-full">
-        <TabsList className="mb-8">
-          <TabsTrigger value="specialty">Specialty Pizzas</TabsTrigger>
-          <TabsTrigger value="custom">Create Your Own</TabsTrigger>
+      <Tabs
+        defaultValue="specialty"
+        className="w-full flex flex-col justify-center items-center"
+      >
+        <TabsList className="mb-8 mt-4 flex justify-center items-center">
+          <TabsTrigger value="specialty">Specialty Pizzas 🍕</TabsTrigger>
+          <TabsTrigger value="custom">Create Your Own 🛠️</TabsTrigger>
         </TabsList>
 
         {/* Specialty Pizzas */}
-        <TabsContent value="specialty">
-          <div className="grid grid-cols-2 gap-4">
-            {specialtyPizzas.map((pizza) => (
-              <PizzaCard key={pizza.id} pizza={pizza} />
-            ))}
-          </div>
+        <TabsContent value="specialty" className="grid grid-cols-2 gap-4">
+          {specialtyPizzas.map((pizza) => (
+            <PizzaCard key={pizza.id} pizza={pizza} />
+          ))}
         </TabsContent>
 
         {/* Custom Pizzas */}
-        <TabsContent value="custom">
+        <TabsContent value="custom" className="w-full">
           {pricing && <CustomPizzaBuilder pricing={pricing} />}
         </TabsContent>
       </Tabs>

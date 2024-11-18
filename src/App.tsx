@@ -18,7 +18,10 @@ export default function App() {
 
             <Route path="/dashboard" element={<EmployeeDashboard />} />
 
-            <Route path="/order-lookup" element={<OrderLookup />} />
+            <Route path="/order-lookup" element={<OrderLookup />}>
+              <Route path=":orderId" element={<OrderLookup />} />
+            </Route>
+            
             <Route path="/order-status/:orderId" element={<OrderLookup />} />
           </Routes>
         </Layout>
