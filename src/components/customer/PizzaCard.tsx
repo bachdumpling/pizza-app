@@ -105,32 +105,32 @@ function PizzaCard({ pizza }: PizzaCardProps): JSX.Element {
   };
 
   return (
-    <Card
-      key={pizza.id}
-      className="border border-gray-200 rounded-lg flex flex-col justify-between h-full"
-    >
-      {/* Pizza Name */}
+    <Card className="border-4 border-yellow-400 bg-white rounded-lg flex flex-col justify-between h-full shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,0.2)] transition-all duration-200 overflow-hidden">
       <div>
-        <CardHeader>
-          <CardTitle>{pizza.name}</CardTitle>
-          <CardDescription>{pizza.description}</CardDescription>
+        <CardHeader className="bg-red-600 text-white border-b-4 border-yellow-400">
+          <CardTitle className="text-2xl font-bold text-yellow-400 drop-shadow-[2px_2px_0px_rgba(0,0,0,0.3)]">
+            {pizza.name}
+          </CardTitle>
+          <CardDescription className="text-white/90 font-mono">
+            {pizza.description}
+          </CardDescription>
         </CardHeader>
 
-        {/* Pizza Selection */}
-        <CardContent className="space-y-4">
-          {/* Toppings Management */}
+        <CardContent className="space-y-6 p-6">
           <div className="space-y-4">
-            <h4 className="font-medium mb-2">Modify Toppings:</h4>
-            <div className="grid gap-2">
+            <h4 className="font-bold text-red-600 text-lg">Modify Toppings:</h4>
+            <div className="grid gap-3">
               {toppingsState.map((topping) => (
                 <div
                   key={topping.name}
-                  className="flex items-center justify-between p-2 bg-gray-50 rounded"
+                  className="flex items-center justify-between p-3 bg-red-50 rounded border-2 border-red-200"
                 >
                   <div className="flex items-center gap-2">
-                    <span className="capitalize">{topping.name}</span>
+                    <span className="capitalize font-medium text-red-600">
+                      {topping.name}
+                    </span>
                     {topping.count > 0 && (
-                      <span className="text-sm text-gray-500">
+                      <span className="text-sm text-red-500 font-mono">
                         ({topping.count}x)
                       </span>
                     )}
@@ -147,10 +147,10 @@ function PizzaCard({ pizza }: PizzaCardProps): JSX.Element {
                       handleToppingChange(topping.name, value)
                     }
                   >
-                    <SelectTrigger className="w-[130px]">
+                    <SelectTrigger className="w-[130px] border-2 border-red-200 bg-white hover:bg-red-50 transition-colors">
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="border-2 border-red-200">
                       <SelectItem value="removed">None</SelectItem>
                       <SelectItem value="regular">Regular (1x)</SelectItem>
                       <SelectItem value="extra">Extra (2x)</SelectItem>
@@ -161,37 +161,34 @@ function PizzaCard({ pizza }: PizzaCardProps): JSX.Element {
             </div>
           </div>
 
-          {/* Size Selection */}
-          <div className="w-full flex flex-row gap-4">
-            <div className="w-full">
-              <h4 className="font-medium mb-2">Select Size:</h4>
-
+          <div className="flex flex-row gap-4">
+            <div className="flex-1">
+              <h4 className="font-bold text-red-600 text-lg mb-2">
+                Select Size:
+              </h4>
               <Select
                 value={size}
-                onValueChange={(value) => {
-                  setSize(value as HiringFrontendTakeHomePizzaSize);
-                }}
+                onValueChange={(value) =>
+                  setSize(value as HiringFrontendTakeHomePizzaSize)
+                }
               >
-                <SelectTrigger>
+                <SelectTrigger className="border-2 border-red-200 bg-white hover:bg-red-50 transition-colors">
                   <SelectValue placeholder="Select size" />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value={HiringFrontendTakeHomePizzaSize.Small}>
-                    Small
-                  </SelectItem>
-                  <SelectItem value={HiringFrontendTakeHomePizzaSize.Medium}>
-                    Medium
-                  </SelectItem>
-                  <SelectItem value={HiringFrontendTakeHomePizzaSize.Large}>
-                    Large
-                  </SelectItem>
+                <SelectContent className="border-2 border-red-200">
+                  {Object.values(HiringFrontendTakeHomePizzaSize).map(
+                    (size) => (
+                      <SelectItem key={size} value={size}>
+                        {size.charAt(0).toUpperCase() + size.slice(1)}
+                      </SelectItem>
+                    )
+                  )}
                 </SelectContent>
               </Select>
             </div>
 
-            {/* Quantity Selection */}
             <div>
-              <h4 className="font-medium mb-2">Quantity:</h4>
+              <h4 className="font-bold text-red-600 text-lg mb-2">Quantity:</h4>
               <Input
                 type="number"
                 min="1"
@@ -199,21 +196,19 @@ function PizzaCard({ pizza }: PizzaCardProps): JSX.Element {
                 onChange={(e) =>
                   setQuantity(Math.max(1, parseInt(e.target.value) || 1))
                 }
-                className="w-20"
+                className="w-20 border-2 border-red-200 bg-white hover:bg-red-50 transition-colors"
               />
             </div>
           </div>
-
-          {/* Price */}
-          {/* <div className="text-lg font-semibold">
-          Total: ${(pizza.price[size] * quantity).toFixed(2)}
-        </div> */}
         </CardContent>
       </div>
 
-      <CardContent className="">
-        <Button onClick={handleAddToCart} className="w-full">
-          Add to Cart
+      <CardContent className="p-6 bg-red-50 border-t-4 border-yellow-400">
+        <Button
+          onClick={handleAddToCart}
+          className="py-6 w-full bg-yellow-400 hover:bg-yellow-300 text-red-600 font-bold text-md border-4 border-red-600 rounded-full transform hover:scale-105 transition-all duration-200"
+        >
+          Add to Cart 👍🏼
         </Button>
       </CardContent>
     </Card>

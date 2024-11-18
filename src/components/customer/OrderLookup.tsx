@@ -5,15 +5,13 @@ import { Button } from "../ui/button";
 import { pizzaApi } from "@/hooks/usePizzaApi";
 import { useLocation, useNavigate, useParams } from "react-router";
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
-import { AlertCircle, CheckCircle2, Clock, MapPin } from "lucide-react";
+import { AlertCircle, CheckCircle2, MapPin } from "lucide-react";
 import {
   HiringFrontendTakeHomeOrderResponse,
-  HiringFrontendTakeHomeOrderStatus,
   HiringFrontendTakeHomeOrderType,
-  OrderItem,
-  PizzaTopping,
 } from "@/types";
 import { formatDate } from "@/lib/utils";
+import StatusBadge from "../ui/StatusBadge";
 
 function OrderLookup() {
   const { orderId: urlOrderId } = useParams();
@@ -68,21 +66,22 @@ function OrderLookup() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-4">
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-xl font-bold">
-            {isConfirmation ? "Order Confirmation" : "Order Lookup"}
+    <div className="w-full py-8 bg-red-50 min-h-screen">
+      <Card className="max-w-2xl mx-auto border-4 border-yellow-400 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)]">
+        <CardHeader className="rounded-t-lg bg-red-600 border-b-4 border-yellow-400">
+          <CardTitle className="text-2xl font-rushford tracking-widest text-yellow-400 drop-shadow-[2px_2px_0px_rgba(0,0,0,0.3)]">
+            {isConfirmation ? "Order Confirmation" : "Track Your Pizza! 🍕"}
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-6">
+        <CardContent className="rounded-b-lg space-y-6 p-6 bg-white">
           {isConfirmation && (
-            <Alert className="bg-green-50">
-              <CheckCircle2 className="h-4 w-4" />
-              <AlertTitle>Order Successfully Placed!</AlertTitle>
-              <AlertDescription>
-                Your order has been confirmed. You can track your order status
-                below.
+            <Alert className="bg-green-100 border-2 border-green-500">
+              <CheckCircle2 className="h-5 w-5 text-green-600" />
+              <AlertTitle className="text-green-700 font-bold">
+                Awesome!
+              </AlertTitle>
+              <AlertDescription className="text-green-600">
+                Your pizza is on its way to the kitchen! Track its status below.
               </AlertDescription>
             </Alert>
           )}
@@ -93,17 +92,22 @@ function OrderLookup() {
                 placeholder="Enter Order ID"
                 value={orderId}
                 onChange={(e) => setOrderId(e.target.value)}
+                className="border-2 border-red-200 focus:border-red-400 focus:ring-red-400"
               />
-              <Button onClick={() => handleLookup()} disabled={loading}>
+              <Button
+                onClick={() => handleLookup()}
+                disabled={loading}
+                className="bg-yellow-400 text-red-600 font-bold border-2 border-red-600 hover:bg-yellow-300 transition-all duration-200"
+              >
                 {loading ? "Loading..." : "Look Up"}
               </Button>
             </div>
           )}
 
           {error && (
-            <Alert variant="destructive">
-              <AlertCircle className="h-4 w-4" />
-              <AlertTitle>Error</AlertTitle>
+            <Alert variant="destructive" className="border-2 border-red-500">
+              <AlertCircle className="h-5 w-5" />
+              <AlertTitle>Oops!</AlertTitle>
               <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}
@@ -111,9 +115,13 @@ function OrderLookup() {
           {order && <OrderDetails order={order} />}
 
           {order?.status === "pending" && (
-            <div className="pt-4 border-t text-right">
-              <h4 className="font-medium mb-2">Order Actions</h4>
-              <Button variant="destructive" onClick={handleCancelOrder}>
+            <div className="pt-4 border-t-4 border-yellow-400 text-right">
+              <h4 className="font-bold text-red-600 mb-2">Order Actions</h4>
+              <Button
+                variant="destructive"
+                onClick={handleCancelOrder}
+                className="bg-red-500 hover:bg-red-600 text-white font-bold border-2 border-red-700"
+              >
                 Cancel Order
               </Button>
             </div>
@@ -150,7 +158,7 @@ const OrderDetails = ({
     <div className="border-t pt-4">
       <div className="flex justify-between items-center">
         <span className="font-medium">Total Amount</span>
-        <span className="font-medium">{order.totalAmount}</span>
+        <span className="font-medium">{order.totalAmount.toFixed(2)}</span>
       </div>
     </div>
 
@@ -188,54 +196,32 @@ const OrderDetails = ({
   </div>
 );
 
-const StatusBadge = ({
-  status,
-}: {
-  status: HiringFrontendTakeHomeOrderStatus;
-}) => {
-  const statusConfig = {
-    pending: { color: "bg-yellow-100 text-yellow-800", icon: Clock },
-    preparing: { color: "bg-blue-100 text-blue-800", icon: Clock },
-    ready: { color: "bg-green-100 text-green-800", icon: CheckCircle2 },
-    delivered: { color: "bg-purple-100 text-purple-800", icon: CheckCircle2 },
-    cancelled: { color: "bg-red-100 text-red-800", icon: AlertCircle },
-  };
-
-  const config = statusConfig[status];
-  const Icon = config.icon;
-
-  return (
-    <span
-      className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-medium gap-2 ${config.color}`}
-    >
-      <Icon size={14} />
-      {status.charAt(0).toUpperCase() + status.slice(1)}
-    </span>
-  );
-};
-
-// Pizza details component
-const PizzaDetails = ({ pizza }: { pizza: OrderItem["pizza"] }) => (
-  <div className="border rounded-lg p-4 mb-4">
-    <h4 className="font-medium">
+// PizzaDetails
+const PizzaDetails = ({ pizza }) => (
+  <div className="border-4 border-yellow-400 rounded-lg p-4 mb-4 bg-red-50">
+    <h4 className="font-bold text-red-600">
       {pizza.type === "specialty" ? "Specialty Pizza" : "Custom Pizza"}
     </h4>
-    <p className="text-sm text-gray-600">Size: {pizza.size}</p>
+    <p className="text-red-800 font-medium">Size: {pizza.size}</p>
     {pizza.toppings && pizza.toppings.length > 0 && (
       <div className="mt-2">
-        <p className="text-sm font-medium">Toppings:</p>
-        <ul className="text-sm text-gray-600">
-          {pizza.toppings.map((topping: PizzaTopping, index: number) => (
-            <li key={index}>
+        <p className="text-red-600 font-bold">Toppings:</p>
+        <ul className="text-red-800">
+          {pizza.toppings.map((topping, index) => (
+            <li key={index} className="font-medium">
               {topping.name} ({topping.quantity})
             </li>
           ))}
         </ul>
       </div>
     )}
-    <div className="mt-2 flex justify-between items-center">
-      <span className="text-sm text-gray-600">Quantity: {pizza.quantity}</span>
-      <span className="font-medium">{pizza.totalPrice}</span>
+    <div className="mt-2 flex justify-between items-center border-t-2 border-yellow-400 pt-2">
+      <span className="text-red-800 font-medium">
+        Quantity: {pizza.quantity}
+      </span>
+      <span className="font-bold text-red-600">
+        ${pizza.totalPrice.toFixed(2)}
+      </span>
     </div>
   </div>
 );

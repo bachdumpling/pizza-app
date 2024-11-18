@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -28,6 +27,7 @@ import {
   CardTitle,
 } from "../ui/card";
 import { formatDate } from "@/lib/utils";
+import StatusBadge from "../ui/StatusBadge";
 
 const LOCATION_ID = import.meta.env.VITE_LOCATION_ID;
 
@@ -41,7 +41,7 @@ function EmployeeDashboard() {
   const fetchOrders = async () => {
     try {
       const response = await pizzaApi.getAllOrders(LOCATION_ID);
-      setOrders(response.orders);
+      setOrders(response.orders.sort((a, b) => b.createdAt - a.createdAt));
       setError("");
     } catch (err) {
       setError("Failed to fetch orders" + err);
@@ -53,23 +53,6 @@ function EmployeeDashboard() {
   useEffect(() => {
     fetchOrders();
   }, []);
-
-  const getStatusColor = (status: HiringFrontendTakeHomeOrderStatus) => {
-    switch (status) {
-      case HiringFrontendTakeHomeOrderStatus.Pending:
-        return "bg-yellow-100 text-yellow-800";
-      case HiringFrontendTakeHomeOrderStatus.Preparing:
-        return "bg-blue-100 text-blue-800";
-      case HiringFrontendTakeHomeOrderStatus.Ready:
-        return "bg-green-100 text-green-800";
-      case HiringFrontendTakeHomeOrderStatus.Delivered:
-        return "bg-gray-100 text-gray-800";
-      case HiringFrontendTakeHomeOrderStatus.Cancelled:
-        return "bg-red-100 text-red-800";
-      default:
-        return "";
-    }
-  };
 
   const handleStatusUpdate = async (
     orderId: string,
@@ -89,112 +72,105 @@ function EmployeeDashboard() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto">
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-xl font-bold">
-            Employee Dashboard
+    <div className="max-w-6xl mx-auto py-4">
+      <Card className="border-4 border-yellow-400 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)]">
+        <CardHeader className="rounded-t-lg bg-red-600 border-b-4 border-yellow-400">
+          <CardTitle className="text-2xl font-rushford tracking-widest leading-none text-yellow-400 drop-shadow-[2px_2px_0px_rgba(0,0,0,0.3)]">
+            Pizza Command Center 🍕
           </CardTitle>
-          <CardDescription>View and update customers' orders</CardDescription>
+          <CardDescription className="text-white/90">
+            Ship those pizzas
+          </CardDescription>
         </CardHeader>
 
-        <CardContent>
-          {error && <p className="text-red-500 mb-4">{error}</p>}
-          {orders.length === 0 ? (
-            <p>No orders found.</p>
-          ) : (
-            <Table>
-              <TableCaption>A list of recent orders.</TableCaption>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="">Order ID</TableHead>
-                  <TableHead>Customer</TableHead>
-                  <TableHead>Amount</TableHead>
-                  <TableHead>Date Ordered</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {orders.map((order) => {
-                  return (
-                    <TableRow>
-                      <TableCell className="font-medium">{order.id}</TableCell>
-                      <TableCell>
-                        {order.customer.firstName} {order.customer.lastName}
-                      </TableCell>
-                      <TableCell>{order.totalAmount}</TableCell>
-                      <TableCell>{formatDate(order.createdAt)}</TableCell>
-
-                      <TableCell>
-                        <span
-                          className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(
-                            order.status
-                          )}`}
-                        >
-                          {order.status}
-                        </span>
-                      </TableCell>
-                      <TableCell>
-                        <Select
-                          value={order.status}
-                          onValueChange={(value) =>
-                            handleStatusUpdate(
-                              order.id,
-                              value as HiringFrontendTakeHomeOrderStatus
-                            )
-                          }
-                          disabled={
-                            order.status ===
-                              HiringFrontendTakeHomeOrderStatus.Cancelled ||
-                            order.status ===
-                              HiringFrontendTakeHomeOrderStatus.Delivered
-                          }
-                        >
-                          <SelectTrigger className="w-[150px]">
-                            <SelectValue placeholder="Update status" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem
-                              value={HiringFrontendTakeHomeOrderStatus.Pending}
-                            >
-                              Pending
-                            </SelectItem>
-                            <SelectItem
-                              value={
-                                HiringFrontendTakeHomeOrderStatus.Preparing
-                              }
-                            >
-                              Preparing
-                            </SelectItem>
-                            <SelectItem
-                              value={HiringFrontendTakeHomeOrderStatus.Ready}
-                            >
-                              Ready
-                            </SelectItem>
-                            <SelectItem
-                              value={
-                                HiringFrontendTakeHomeOrderStatus.Delivered
-                              }
-                            >
-                              Delivered
-                            </SelectItem>
-                            <SelectItem
-                              value={
-                                HiringFrontendTakeHomeOrderStatus.Cancelled
-                              }
-                            >
-                              Cancelled
-                            </SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
+        <CardContent className="rounded-b-lg p-6 bg-white">
+          {error && (
+            <p className="text-red-500 mb-4 font-bold border-2 border-red-500 p-4 rounded-lg">
+              {error}
+            </p>
           )}
+
+          <Table>
+            <TableHeader>
+              <TableRow className="bg-red-100 hover:bg-red-100/80">
+                <TableHead className="font-bold text-red-600">
+                  Order ID
+                </TableHead>
+                <TableHead className="font-bold text-red-600">
+                  Customer
+                </TableHead>
+                <TableHead className="font-bold text-red-600">Amount</TableHead>
+                <TableHead className="font-bold text-red-600">
+                  Date Ordered
+                </TableHead>
+                <TableHead className="font-bold text-red-600">Status</TableHead>
+                <TableHead className="font-bold text-red-600">
+                  Actions
+                </TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {orders.map((order) => (
+                <TableRow key={order.id} className="hover:bg-red-50">
+                  <TableCell className="font-medium">{order.id}</TableCell>
+                  <TableCell>
+                    {order.customer.firstName} {order.customer.lastName}
+                  </TableCell>
+                  <TableCell>${order.totalAmount.toFixed(2)}</TableCell>
+                  <TableCell>{formatDate(order.createdAt)}</TableCell>
+                  <TableCell>
+                    <StatusBadge status={order.status} />
+                  </TableCell>
+                  <TableCell>
+                    <Select
+                      value={order.status}
+                      onValueChange={(value) =>
+                        handleStatusUpdate(
+                          order.id,
+                          value as HiringFrontendTakeHomeOrderStatus
+                        )
+                      }
+                      disabled={
+                        order.status === "cancelled" ||
+                        order.status === "delivered"
+                      }
+                    >
+                      <SelectTrigger className="w-[150px] border-2 border-red-200 bg-white hover:bg-red-50">
+                        <SelectValue placeholder="Update status" />
+                      </SelectTrigger>
+                      <SelectContent className="border-2 border-red-200">
+                        <SelectItem
+                          value={HiringFrontendTakeHomeOrderStatus.Pending}
+                        >
+                          Pending
+                        </SelectItem>
+                        <SelectItem
+                          value={HiringFrontendTakeHomeOrderStatus.Preparing}
+                        >
+                          Preparing
+                        </SelectItem>
+                        <SelectItem
+                          value={HiringFrontendTakeHomeOrderStatus.Ready}
+                        >
+                          Ready
+                        </SelectItem>
+                        <SelectItem
+                          value={HiringFrontendTakeHomeOrderStatus.Delivered}
+                        >
+                          Delivered
+                        </SelectItem>
+                        <SelectItem
+                          value={HiringFrontendTakeHomeOrderStatus.Cancelled}
+                        >
+                          Cancelled
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         </CardContent>
       </Card>
     </div>

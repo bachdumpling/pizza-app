@@ -71,76 +71,68 @@ function Cart() {
     <div className="flex flex-col justify-between h-full">
       <div className="flex flex-col gap-4">
         {items.map((item) => (
-          <Card key={item.id}>
-            <CardHeader>
-              <h2 className="font-bold">{item.pizza.name}</h2>
+          <Card
+            key={item.id}
+            className="border-4 border-yellow-400 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.2)]"
+          >
+            <CardHeader className="bg-red-600 border-b-4 border-yellow-400 rounded-t-lg">
+              <h2 className="font-bold text-yellow-400 drop-shadow-[2px_2px_0px_rgba(0,0,0,0.3)]">
+                {item.pizza.name}
+              </h2>
             </CardHeader>
 
-            <CardContent>
-              <div className="flex flex-col items-center gap-4">
-                <div className="w-full">
-                  <h3 className="font-medium text-md">
-                    {item.pizza.type === "specialty"
-                      ? "Specialty Pizza"
-                      : "Custom Pizza"}{" "}
-                    | {item.pizza.size.toUpperCase()}
-                  </h3>
-                  <span className="text-sm text-gray-500">
-                    {item.pizza.toppings && item.pizza.toppings.length > 0 && (
-                      <span className="text-sm text-gray-500">
-                        {formatToppings(item).join(", ")}
-                      </span>
-                    )}
-                  </span>
-                </div>
-                <div className="flex flex-row justify-between w-full">
-                  {/* Edit quantity */}
-                  <div className="flex items-center space-x-2">
-                    <label className="text-sm font-medium">Quantity:</label>
-                    <Input
-                      type="number"
-                      min="1"
-                      value={item.pizza.quantity}
-                      onChange={(e) => {
-                        const value = parseInt(e.target.value);
-                        if (value > 0) {
-                          updateQuantity(item.id, value);
-                        }
-                      }}
-                      className="w-20"
-                    />
-                  </div>
+            <CardContent className="rounded-b-lg p-4 space-y-4 bg-white">
+              <div className="w-full">
+                <h3 className="font-bold text-red-600">
+                  {item.pizza.type === "specialty"
+                    ? "Specialty Pizza"
+                    : "Custom Pizza"}{" "}
+                  | {item.pizza.size.toUpperCase()}
+                </h3>
+                <span className="text-sm text-red-800">
+                  {formatToppings(item).join(", ")}
+                </span>
+              </div>
 
-                  {/* Price */}
-                  {/* <p className="font-medium">
-                  ${item.pizza.totalPrice.toFixed(2)}
-                </p> */}
-                  <Button
-                    variant="destructive"
-                    size="sm"
-                    onClick={() => removeFromCart(item.id)}
-                  >
-                    Remove
-                  </Button>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <label className="font-medium text-red-600">Quantity:</label>
+                  <Input
+                    type="number"
+                    min="1"
+                    value={item.pizza.quantity}
+                    onChange={(e) => {
+                      const value = parseInt(e.target.value);
+                      if (value > 0) updateQuantity(item.id, value);
+                    }}
+                    className="w-20 border-2 border-red-200"
+                  />
                 </div>
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  onClick={() => removeFromCart(item.id)}
+                  className="bg-red-500 hover:bg-red-600 font-bold border-2 border-red-700"
+                >
+                  Remove
+                </Button>
               </div>
             </CardContent>
           </Card>
         ))}
       </div>
 
-      <div className="mb-16">
-        <h3 className="text-lg font-semibold">
+      <div className="mt-8 mb-4 border-t-4 border-yellow-400 pt-4">
+        <h3 className="text-xl font-bold text-red-600">
           Total: ${totalAmount.toFixed(2)}
         </h3>
 
         <SheetClose asChild>
           <Button
-            variant="outline"
-            className="w-full mt-4"
+            className="w-full mt-4 mb-6 bg-yellow-400 text-red-600 font-bold border-4 border-red-600 hover:bg-yellow-300 transform hover:scale-105 transition-all duration-200"
             onClick={handleCheckout}
           >
-            Checkout
+            Checkout 🍕
           </Button>
         </SheetClose>
       </div>

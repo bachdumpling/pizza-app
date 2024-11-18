@@ -6,6 +6,7 @@ import Menu from "./components/customer/Menu";
 import Checkout from "./components/customer/Checkout";
 import OrderLookup from "./components/customer/OrderLookup";
 import EmployeeDashboard from "./components/employee/EmployeeDashboard";
+import Landing from "./components/LandingPage";
 
 export default function App() {
   return (
@@ -13,7 +14,8 @@ export default function App() {
       <CartProvider>
         <Layout>
           <Routes>
-            <Route path="/" element={<Menu />} />
+            <Route path="/" element={<Landing />} />
+            <Route path="/menu" element={<Menu />} />
             <Route path="/checkout" element={<Checkout />} />
 
             <Route path="/dashboard" element={<EmployeeDashboard />} />

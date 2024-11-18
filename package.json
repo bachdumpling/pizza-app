@@ -18,6 +18,8 @@
     "@radix-ui/react-select": "^2.1.2",
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-tabs": "^1.1.1",
+    "@react-three/drei": "^9.117.2",
+    "@react-three/fiber": "^8.17.10",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "lucide-react": "^0.460.0",
@@ -26,8 +28,10 @@
     "react-hook-form": "^7.53.2",
     "react-router": "^6.28.0",
     "react-router-dom": "^6.28.0",
+    "react-three-fiber": "^6.0.13",
     "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7",
+    "three": "^0.170.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {

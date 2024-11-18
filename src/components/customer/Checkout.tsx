@@ -4,8 +4,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Input } from "../ui/input";
 import {
   Customer,
+  HiringFrontendTakeHomeOrderRequest,
   HiringFrontendTakeHomeOrderType,
   HiringFrontendTakeHomePaymentMethod,
+  HiringFrontendTakeHomePizzaType,
 } from "@/types";
 import {
   Select,
@@ -46,8 +48,22 @@ function Checkout() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
-    try {
-      const customerData: Customer = {
+    const orderData: HiringFrontendTakeHomeOrderRequest = {
+      locationId: LOCATION_ID,
+      items: items.map((item) => ({
+        id: item.id,
+        pizza: {
+          type: item.pizza.type,
+          size: item.pizza.size,
+          toppings: item.pizza.toppings || [],
+          ...(item.pizza.type === HiringFrontendTakeHomePizzaType.Specialty && {
+            toppingExclusions: item.pizza.toppingExclusions,
+          }),
+          quantity: item.pizza.quantity,
+          totalPrice: item.pizza.totalPrice,
+        },
+      })),
+      customer: {
         firstName: formData.firstName,
         lastName: formData.lastName,
         email: formData.email,
@@ -59,31 +75,23 @@ function Checkout() {
             zipCode: formData.zipCode,
           },
         }),
-      };
+      },
+      totalAmount: totalAmount,
+      paymentMethod: paymentMethod,
+      ...(paymentMethod === HiringFrontendTakeHomePaymentMethod.CreditCard && {
+        creditCardNumber: formData.creditCardNumber,
+      }),
+      type: orderType,
+    };
 
-      const orderData = {
-        locationId: LOCATION_ID,
-        items,
-        customer: customerData,
-        totalAmount,
-        paymentMethod,
-        type: orderType,
-        ...(paymentMethod ===
-          HiringFrontendTakeHomePaymentMethod.CreditCard && {
-          creditCardNumber: formData.creditCardNumber,
-        }),
-      };
-
-      // Wait for the response using await
+    try {
       const response = await pizzaApi.createOrder(orderData);
-
       clearCart();
-
       navigate(`/order-lookup/${response.order.id}`, {
         state: { isConfirmation: true },
       });
     } catch (error) {
-      console.error("Error creating order:", error);
+      console.error("Order submission failed:", error);
     }
   }
 
@@ -96,28 +104,34 @@ function Checkout() {
 
   return (
     <div className="max-w-2xl mx-auto p-4">
+      <h1 className="text-4xl font-black text-red-600 text-center mb-10 mt-4 drop-shadow-[2px_2px_0px_rgba(0,0,0,0.3)] tracking-wide uppercase transform -rotate-2">
+        Ready to Order! 🍕
+      </h1>
+
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Order Type */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Order Type</CardTitle>
+        <Card className="border-4 border-yellow-400 shadow-[6px_6px_0px_0px_rgba(0,0,0,0.3)] overflow-hidden">
+          <CardHeader className="bg-red-600 border-b-4 border-yellow-400">
+            <CardTitle className="text-xl font-black text-yellow-400 drop-shadow-[2px_2px_0px_rgba(0,0,0,0.3)] uppercase tracking-wide transform rotate-1">
+              Pick Your Style 🛵
+            </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-6 bg-white">
             <Select
               value={orderType}
               onValueChange={(value) =>
                 setOrderType(value as HiringFrontendTakeHomeOrderType)
               }
             >
-              <SelectTrigger>
+              <SelectTrigger className="border-2 border-red-200 hover:bg-red-50 transition-colors">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="border-2 border-red-200">
                 <SelectItem value={HiringFrontendTakeHomeOrderType.Pickup}>
-                  Pickup
+                  📍 Local Pickup
                 </SelectItem>
                 <SelectItem value={HiringFrontendTakeHomeOrderType.Delivery}>
-                  Delivery
+                  🛵 Home Delivery
                 </SelectItem>
               </SelectContent>
             </Select>
@@ -125,11 +139,13 @@ function Checkout() {
         </Card>
 
         {/* Customer Information */}
-        <Card className="mb-6">
-          <CardHeader>
-            <CardTitle>Customer Information</CardTitle>
+        <Card className="border-4 border-yellow-400 shadow-[6px_6px_0px_0px_rgba(0,0,0,0.3)]">
+          <CardHeader className="rounded-t-lg bg-red-600 border-b-4 border-yellow-400">
+            <CardTitle className="text-xl font-black text-yellow-400 drop-shadow-[2px_2px_0px_rgba(0,0,0,0.3)] uppercase tracking-wide transform -rotate-1">
+              Your Details 👋
+            </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="rounded-b-lg space-y-4 p-6 bg-white">
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
@@ -169,51 +185,56 @@ function Checkout() {
 
               {/* Ask for delivery address */}
               {orderType === HiringFrontendTakeHomeOrderType.Delivery && (
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium mb-1">
-                      Street Address
-                    </label>
-                    <Input
-                      name="street"
-                      value={formData.street}
-                      onChange={handleInputChange}
-                      required
-                    />
-                  </div>
-                  <div className="grid grid-cols-3 gap-4">
+                <div className="space-y-4 border-t-4 border-yellow-400 pt-4 mt-6">
+                  <h3 className="text-lg font-black text-red-600 uppercase tracking-wide transform -rotate-1 inline-block bg-yellow-200 px-4 py-1 rounded-lg shadow-md">
+                    Delivery Zone 🚚
+                  </h3>
+                  <div className="space-y-4">
                     <div>
                       <label className="block text-sm font-medium mb-1">
-                        City
+                        Street Address
                       </label>
                       <Input
-                        name="city"
-                        value={formData.city}
+                        name="street"
+                        value={formData.street}
                         onChange={handleInputChange}
                         required
                       />
                     </div>
-                    <div>
-                      <label className="block text-sm font-medium mb-1">
-                        State
-                      </label>
-                      <Input
-                        name="state"
-                        value={formData.state}
-                        onChange={handleInputChange}
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium mb-1">
-                        ZIP Code
-                      </label>
-                      <Input
-                        name="zipCode"
-                        value={formData.zipCode}
-                        onChange={handleInputChange}
-                        required
-                      />
+                    <div className="grid grid-cols-3 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium mb-1">
+                          City
+                        </label>
+                        <Input
+                          name="city"
+                          value={formData.city}
+                          onChange={handleInputChange}
+                          required
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-1">
+                          State
+                        </label>
+                        <Input
+                          name="state"
+                          value={formData.state}
+                          onChange={handleInputChange}
+                          required
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-1">
+                          ZIP Code
+                        </label>
+                        <Input
+                          name="zipCode"
+                          value={formData.zipCode}
+                          onChange={handleInputChange}
+                          required
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -223,43 +244,54 @@ function Checkout() {
         </Card>
 
         {/* Order Summary */}
-        <Card className="mb-6">
-          <CardHeader>
-            <CardTitle>Order Summary</CardTitle>
+        <Card className="border-4 border-yellow-400 shadow-[6px_6px_0px_0px_rgba(0,0,0,0.3)]">
+          <CardHeader className="rounded-t-lg bg-red-600 border-b-4 border-yellow-400">
+            <CardTitle className="text-xl font-black text-yellow-400 drop-shadow-[2px_2px_0px_rgba(0,0,0,0.3)] uppercase tracking-wide transform rotate-1">
+              The Good Stuff 🔥
+            </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="rounded-b-lg p-6 bg-white">
             <div className="space-y-2">
               {items.map((item) => (
                 <div
                   key={item.id}
-                  className="flex justify-between items-center py-2 border-b"
+                  className="flex justify-between items-center py-3 border-b-2 border-red-100 bg-red-50 transition-colors rounded-lg px-3"
                 >
                   <div>
-                    <div className="font-medium">
+                    <div className="font-extrabold text-red-600 tracking-wide">
                       {item.pizza.type === "specialty"
                         ? item.pizza.name
                         : "Custom Pizza"}
                     </div>
-                    <div className="text-sm text-gray-500">
-                      {item.pizza.size} - Qty: {item.pizza.quantity}
+                    <div className="text-sm font-bold text-red-500">
+                      {item.pizza.size.toUpperCase()} - QTY:{" "}
+                      {item.pizza.quantity}
                     </div>
                   </div>
-                  <div>${item.pizza.totalPrice.toFixed(2)}</div>
+                  <div className="font-black text-red-600 bg-yellow-200 px-3 py-1 rounded-full transform rotate-3">
+                    ${item.pizza.totalPrice.toFixed(2)}
+                  </div>
                 </div>
               ))}
-              <div className="flex justify-between items-center pt-4 font-bold">
-                <div>Total</div>
-                <div>${totalAmount.toFixed(2)}</div>
+              <div className="flex justify-between items-center pt-4 mt-4 border-t-4 border-yellow-400">
+                <div className="text-xl font-black text-red-600 uppercase tracking-wide">
+                  Total
+                </div>
+                <div className="text-xl font-black text-red-600 bg-yellow-300 px-4 py-2 rounded-lg transform -rotate-2 shadow-md">
+                  ${totalAmount.toFixed(2)}
+                </div>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Payment Method</CardTitle>
+        <Card className="border-4 border-yellow-400 shadow-[6px_6px_0px_0px_rgba(0,0,0,0.3)]">
+          <CardHeader className="rounded-t-lg bg-red-600 border-b-4 border-yellow-400">
+            <CardTitle className="text-xl font-black text-yellow-400 drop-shadow-[2px_2px_0px_rgba(0,0,0,0.3)] uppercase tracking-wide transform -rotate-1">
+              Payment Time 💳
+            </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="rounded-b-lg space-y-4 p-6 bg-white">
             <Select
               value={paymentMethod}
               onValueChange={(value) =>
@@ -298,8 +330,12 @@ function Checkout() {
           </CardContent>
         </Card>
 
-        <Button type="submit" className="w-full" disabled={items.length === 0}>
-          Place Order
+        <Button
+          type="submit"
+          disabled={items.length === 0}
+          className="w-full bg-yellow-400 hover:bg-yellow-300 text-red-600 font-bold text-lg border-4 border-red-600 rounded-full transform hover:scale-105 transition-all duration-200 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)] disabled:opacity-50 disabled:cursor-not-allowed py-6"
+        >
+          Place Order 🍕
         </Button>
       </form>
     </div>
