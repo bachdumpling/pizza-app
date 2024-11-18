@@ -30,9 +30,9 @@ function Menu() {
         defaultValue="specialty"
         className="w-full flex flex-col justify-center items-center"
       >
-        <TabsList className="mb-8 mt-4 flex justify-center items-center">
-          <TabsTrigger value="specialty">Specialty Pizzas 🍕</TabsTrigger>
-          <TabsTrigger value="custom">Create Your Own 🛠️</TabsTrigger>
+        <TabsList className="w-full md:w-1/2 mb-8 mt-4 flex justify-center items-center">
+          <TabsTrigger value="specialty" className="w-full">Specialty Pizzas 🍕</TabsTrigger>
+          <TabsTrigger value="custom" className="w-full">Create Your Own 🛠️</TabsTrigger>
         </TabsList>
 
         {/* Specialty Pizzas */}
