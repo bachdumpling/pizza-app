@@ -1,5 +1,5 @@
 import { OrderItem } from "@/types";
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 interface CartContextType {
   items: OrderItem[];
@@ -13,8 +13,22 @@ interface CartContextType {
 const CartContext = createContext<CartContextType | null>(null);
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
-  const [items, setItems] = useState<OrderItem[]>([]);
+  // Initialize state from localStorage if available
+  const [items, setItems] = useState<OrderItem[]>(() => {
+    const savedCart = localStorage.getItem("cart");
+    return savedCart ? JSON.parse(savedCart) : [];
+  });
 
+  // Calculate total amount
+  const totalAmount = items.reduce(
+    (sum, item) => sum + item.pizza.totalPrice,
+    0
+  );
+
+  // Save to localStorage whenever cart changes
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(items));
+  }, [items]);
   const addToCart = (item: OrderItem) => {
     setItems((prev) => [...prev, item]);
   };
@@ -25,6 +39,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const clearCart = () => {
     setItems([]);
+    localStorage.removeItem('cart');
   };
 
   const updateQuantity = (id: string, quantity: number) => {
@@ -45,11 +60,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       })
     );
   };
-
-  const totalAmount = items.reduce(
-    (sum, item) => sum + item.pizza.totalPrice,
-    0
-  );
 
   return (
     <CartContext.Provider

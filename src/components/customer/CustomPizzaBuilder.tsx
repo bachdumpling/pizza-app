@@ -19,6 +19,12 @@ import {
 } from "../ui/select";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import OpenAI from "openai";
+
+const openai = new OpenAI({
+  apiKey: import.meta.env.VITE_OPENAI_API_KEY,
+  dangerouslyAllowBrowser: true,
+});
 
 type CustomPizzaProps = {
   pricing: GetPizzaPricingResponse;
@@ -82,21 +88,44 @@ const CustomPizza: React.FC<CustomPizzaProps> = ({ pricing }) => {
   };
 
   const handleAddToCart = () => {
-    const orderItem: OrderItem = {
-      id: crypto.randomUUID(),
-      pizza: {
-        name: "Custom Pizza",
-        type: HiringFrontendTakeHomePizzaType.Custom,
-        size,
-        toppings,
-        quantity,
-        totalPrice: calculatePrice(),
-      },
-    };
+    async function createCustomPizzaName(): Promise<string> {
+      try {
+        const completion = await openai.chat.completions.create({
+          messages: [
+            { role: "system", content: "You are an expert Pizza Chef." },
+            {
+              role: "user",
+              content: `Return a short string of maximum 3 words that describes this custom pizza with ${size} size and ${toppings
+                .map((t) => `${t.quantity} ${t.name}`)
+                .join(", ")}. Make the name funny, retro, and unique!`,
+            },
+          ],
+          model: "gpt-4o",
+        });
 
-    // console.log("Adding to cart", orderItem);
+        return completion.choices[0].message.content;
+      } catch (error) {
+        console.error("Failed to create custom pizza name:", error);
+        return "Custom Pizza";
+      }
+    }
+    createCustomPizzaName().then((pizzaName) => {
+      const orderItem: OrderItem = {
+        id: crypto.randomUUID(),
+        pizza: {
+          name: pizzaName,
+          type: HiringFrontendTakeHomePizzaType.Custom,
+          size,
+          toppings,
+          quantity,
+          totalPrice: calculatePrice(),
+        },
+      };
 
-    addToCart(orderItem);
+      console.log("Adding to cart", orderItem);
+
+      addToCart(orderItem);
+    });
   };
 
   return (
