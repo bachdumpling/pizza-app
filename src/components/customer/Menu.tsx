@@ -1,10 +1,52 @@
 import { pizzaApi } from "@/hooks/usePizzaApi";
 import { SpecialtyPizza } from "@/types";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import PizzaCard from "./PizzaCard";
 import { GetPizzaPricingResponse } from "@/types/api";
 import CustomPizzaBuilder from "./CustomPizzaBuilder";
+
+/**
+ * The `Menu` component displays a menu of specialty pizzas and a custom pizza builder.
+ * It fetches the list of specialty pizzas and their pricing from an API and allows users to filter
+ * the specialty pizzas by group or create their own custom pizza.
+ *
+ * @component
+ * @example
+ * // Usage example:
+ * // <Menu />
+ *
+ * @returns {JSX.Element} The rendered component.
+ *
+ * @remarks
+ * This component uses the `useState` and `useEffect` hooks to manage state and side effects.
+ * It also uses the `Tabs`, `TabsList`, `TabsTrigger`, and `TabsContent` components to create
+ * a tabbed interface for switching between specialty pizzas and the custom pizza builder.
+ *
+ * @function
+ * @name Menu
+ *
+ * @typedef {Object} SpecialtyPizza
+ * @property {string} id - The unique identifier for the pizza.
+ * @property {string} name - The name of the pizza.
+ * @property {string} group - The group to which the pizza belongs.
+ * @property {string} description - A description of the pizza.
+ * @property {string} imageUrl - The URL of the pizza's image.
+ *
+ * @typedef {Object} GetPizzaPricingResponse
+ * @property {number} basePrice - The base price of a custom pizza.
+ * @property {Object.<string, number>} toppings - The prices of the available toppings.
+ *
+ * @typedef {Object} PizzaApi
+ * @property {Function} getSpecialtyPizzas - Fetches the list of specialty pizzas.
+ * @property {Function} getPizzaPricing - Fetches the pricing information for custom pizzas.
+ *
+ * @typedef {Object} PizzaCardProps
+ * @property {SpecialtyPizza} pizza - The pizza to display in the card.
+ *
+ * @typedef {Object} CustomPizzaBuilderProps
+ * @property {GetPizzaPricingResponse} pricing - The pricing information for custom pizzas.
+ */
 
 function Menu() {
   const [specialtyPizzas, setSpecialtyPizzas] = useState<SpecialtyPizza[]>([]);
@@ -29,10 +71,26 @@ function Menu() {
   ];
 
   // Filter pizzas based on selected group
-  const filteredPizzas =
-    selectedGroup === "all"
-      ? specialtyPizzas
-      : specialtyPizzas.filter((pizza) => pizza.group === selectedGroup);
+  const filteredPizzaObj = useMemo(() => {
+    const pizzaGroup = {
+      all: specialtyPizzas,
+    };
+    for (const pizza of specialtyPizzas) {
+      if (!pizzaGroup[pizza.group]) {
+        pizzaGroup[pizza.group] = [];
+      }
+
+      pizzaGroup[pizza.group].push(pizza);
+    }
+
+    return pizzaGroup;
+  }, [specialtyPizzas]);
+
+  const filteredPizzas = useMemo(() => {
+    return selectedGroup === "all"
+      ? filteredPizzaObj["all"]
+      : filteredPizzaObj[selectedGroup] || [];
+  }, [filteredPizzaObj, selectedGroup]);
 
   return (
     <div className="w-full min-h-screen p-4 bg-[#FFFFE4] mb-10">

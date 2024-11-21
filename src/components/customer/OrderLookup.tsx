@@ -13,6 +13,43 @@ import {
 import { formatDate } from "@/lib/utils";
 import StatusBadge from "../ui/StatusBadge";
 
+/**
+ * OrderLookup component allows users to look up and track their pizza orders.
+ * It provides functionality to enter an order ID, fetch order details, and display order status.
+ * Users can also cancel their order if it is in a pending state.
+ *
+ * @component
+ *
+ * @example
+ * // Usage example:
+ * <OrderLookup />
+ *
+ * @returns {JSX.Element} The rendered OrderLookup component.
+ *
+ * @remarks
+ * This component uses the `useParams` hook to get the order ID from the URL,
+ * the `useLocation` hook to check if the component is being used for order confirmation,
+ * and the `useNavigate` hook to navigate to the order lookup URL.
+ *
+ * @function
+ * @name OrderLookup
+ *
+ * @hook {useParams} - Retrieves the order ID from the URL.
+ * @hook {useState} - Manages the state for order ID, order details, error messages, and loading status.
+ * @hook {useLocation} - Gets the current location object to check for order confirmation state.
+ * @hook {useNavigate} - Provides navigation functionality to update the URL.
+ * @hook {useEffect} - Triggers the order lookup when the component mounts or the URL order ID changes.
+ * @hook {useCallback} - Memoizes the handleLookup function to prevent unnecessary re-renders.
+ *
+ * @param {string} orderId - The ID of the order to look up.
+ * @param {object} order - The details of the fetched order.
+ * @param {string} error - The error message to display if the order lookup fails.
+ * @param {boolean} loading - The loading state to indicate if the order lookup is in progress.
+ * @param {boolean} isConfirmation - Indicates if the component is being used for order confirmation.
+ *
+ * @method handleLookup - Fetches the order details by order ID and updates the state.
+ * @method handleCancelOrder - Cancels the order if it is in a pending state.
+ */
 function OrderLookup() {
   const { orderId: urlOrderId } = useParams();
   const [orderId, setOrderId] = useState("");

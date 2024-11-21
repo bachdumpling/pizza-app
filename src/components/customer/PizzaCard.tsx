@@ -35,6 +35,54 @@ interface ToppingState {
   count: number; // 0 for removed, 1 for regular, 2 for extra
 }
 
+/**
+ * Component for displaying a pizza card with options to modify toppings, select size, and quantity, and add the pizza to the cart.
+ *
+ * @component
+ * @param {PizzaCardProps} props - The properties for the PizzaCard component.
+ * @param {Pizza} props.pizza - The pizza object containing details about the pizza.
+ * @returns {JSX.Element} The rendered PizzaCard component.
+ *
+ * @example
+ * <PizzaCard pizza={pizza} />
+ *
+ * @remarks
+ * This component uses the `useCart` hook to add items to the cart.
+ * It maintains state for the selected pizza size, quantity, and toppings.
+ *
+ * @function
+ * @name PizzaCard
+ *
+ * @typedef {Object} PizzaCardProps
+ * @property {Pizza} pizza - The pizza object containing details about the pizza.
+ *
+ * @typedef {Object} Pizza
+ * @property {string} name - The name of the pizza.
+ * @property {string} description - The description of the pizza.
+ * @property {string[]} toppings - The list of available toppings for the pizza.
+ * @property {Record<HiringFrontendTakeHomePizzaSize, number>} price - The price of the pizza based on its size.
+ *
+ * @typedef {Object} ToppingState
+ * @property {string} name - The name of the topping.
+ * @property {number} count - The count of the topping (0 for none, 1 for regular, 2 for extra).
+ *
+ * @typedef {Object} OrderItem
+ * @property {string} id - The unique identifier for the order item.
+ * @property {PizzaOrder} pizza - The pizza order details.
+ *
+ * @typedef {Object} PizzaOrder
+ * @property {string} name - The name of the pizza.
+ * @property {HiringFrontendTakeHomePizzaType} type - The type of the pizza.
+ * @property {HiringFrontendTakeHomePizzaSize} size - The size of the pizza.
+ * @property {PizzaTopping[]} toppings - The list of toppings for the pizza.
+ * @property {HiringFrontendTakeHomePizzaToppings[]} toppingExclusions - The list of excluded toppings.
+ * @property {number} quantity - The quantity of the pizza.
+ * @property {number} totalPrice - The total price of the pizza order.
+ *
+ * @typedef {Object} PizzaTopping
+ * @property {string} name - The name of the topping.
+ * @property {HiringFrontendTakeHomeToppingQuantity} quantity - The quantity of the topping.
+ */
 function PizzaCard({ pizza }: PizzaCardProps): JSX.Element {
   const { addToCart } = useCart();
 

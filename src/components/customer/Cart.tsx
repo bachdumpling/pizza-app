@@ -11,6 +11,37 @@ interface CartItem {
   pizza: Pizza;
 }
 
+/**
+ * Cart component that displays the items in the user's cart and allows for interaction such as updating quantities and removing items.
+ * 
+ * @component
+ * @example
+ * // Usage example:
+ * // <Cart />
+ * 
+ * @returns {JSX.Element} The rendered Cart component.
+ * 
+ * @remarks
+ * - If the cart is empty, a message is displayed indicating that the cart is empty.
+ * - For each item in the cart, a card is displayed with the pizza details, quantity input, and a remove button.
+ * - The total amount is displayed at the bottom with a checkout button.
+ * 
+ * @function formatToppings
+ * Formats the toppings of a pizza item for display.
+ * 
+ * @param {CartItem} item - The cart item containing the pizza and its toppings.
+ * @returns {string[]} An array of formatted topping strings.
+ * 
+ * @function handleCheckout
+ * Navigates the user to the checkout page.
+ * 
+ * @hook useCart
+ * Custom hook to retrieve cart-related data and actions.
+ * 
+ * @hook useNavigate
+ * Custom hook to navigate programmatically.
+ */
+
 function Cart() {
   const { items, removeFromCart, totalAmount, updateQuantity } = useCart();
   const navigate = useNavigate();

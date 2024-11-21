@@ -30,6 +30,26 @@ type CustomPizzaProps = {
   pricing: GetPizzaPricingResponse;
 };
 
+/**
+ * CustomPizza component allows users to build their custom pizza by selecting size, toppings, and quantity.
+ * It calculates the total price based on the selected options and allows adding the custom pizza to the cart.
+ *
+ * @component
+ * @param {CustomPizzaProps} props - The properties for the CustomPizza component.
+ * @param {Pricing} props.pricing - The pricing details for different pizza sizes and toppings.
+ *
+ * @returns {JSX.Element} The rendered CustomPizza component.
+ *
+ * @example
+ * <CustomPizza pricing={pricingData} />
+ *
+ * @remarks
+ * This component uses the `useCart` hook to add the custom pizza to the cart.
+ * It also uses the `useState` hook to manage the state of size, quantity, and toppings.
+ * The `calculatePrice` function computes the total price based on the selected options.
+ * The `handleToppingChange` function updates the toppings state when a topping is selected or removed.
+ * The `handleAddToCart` function generates a custom pizza name using OpenAI's GPT-4 model and adds the pizza to the cart.
+ */
 const CustomPizza: React.FC<CustomPizzaProps> = ({ pricing }) => {
   const { addToCart } = useCart();
   const [size, setSize] = useState<HiringFrontendTakeHomePizzaSize>(

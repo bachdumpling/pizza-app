@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Input } from "../ui/input";
 import {
-  Customer,
   HiringFrontendTakeHomeOrderRequest,
   HiringFrontendTakeHomeOrderType,
   HiringFrontendTakeHomePaymentMethod,
@@ -22,6 +21,38 @@ import { useNavigate } from "react-router";
 
 const LOCATION_ID = import.meta.env.VITE_LOCATION_ID;
 
+/**
+ * The `Checkout` component handles the checkout process for a customer.
+ * It allows the user to select the order type (pickup or delivery), enter customer details,
+ * review the order summary, and choose a payment method before submitting the order.
+ *
+ * @component
+ *
+ * @example
+ * ```tsx
+ * <Checkout />
+ * ```
+ *
+ * @returns {JSX.Element} The rendered component.
+ *
+ * @remarks
+ * This component uses several hooks and components:
+ * - `useNavigate` from `react-router-dom` for navigation after order submission.
+ * - `useCart` custom hook to access cart items, total amount, and clear cart function.
+ * - `useState` to manage local state for order type, payment method, and form data.
+ *
+ * The component consists of several sections:
+ * - Order Type: Allows the user to select between pickup and delivery.
+ * - Customer Information: Collects customer details such as name, email, and address (if delivery is selected).
+ * - Order Summary: Displays the items in the cart and the total amount.
+ * - Payment Method: Allows the user to select a payment method and enter credit card details if applicable.
+ *
+ * The `handleSubmit` function is called when the form is submitted. It constructs the order data and sends it to the API.
+ * If the order is successfully created, the cart is cleared, and the user is navigated to the order confirmation page.
+ * If there is an error, it is logged to the console.
+ *
+ * The `handleInputChange` function updates the form data state when the user types into the input fields.
+ */
 function Checkout() {
   const navigate = useNavigate();
   const { items, totalAmount, clearCart } = useCart();

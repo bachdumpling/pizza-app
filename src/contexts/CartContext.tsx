@@ -12,6 +12,33 @@ interface CartContextType {
 
 const CartContext = createContext<CartContextType | null>(null);
 
+/**
+ * Provides the cart context to its children components.
+ *
+ * @param {Object} props - The properties object.
+ * @param {React.ReactNode} props.children - The child components to be wrapped by the provider.
+ *
+ * @returns {JSX.Element} The CartContext provider with the given children.
+ *
+ * @remarks
+ * This component initializes the cart state from localStorage if available and saves the cart state to localStorage whenever it changes.
+ *
+ * @example
+ * ```tsx
+ * <CartProvider>
+ *   <YourComponent />
+ * </CartProvider>
+ * ```
+ *
+ * @context
+ * The context provides the following values:
+ * - `items`: The list of items in the cart.
+ * - `addToCart`: Function to add an item to the cart.
+ * - `removeFromCart`: Function to remove an item from the cart by its ID.
+ * - `clearCart`: Function to clear all items from the cart.
+ * - `updateQuantity`: Function to update the quantity of an item in the cart by its ID.
+ * - `totalAmount`: The total amount of all items in the cart.
+ */
 export function CartProvider({ children }: { children: React.ReactNode }) {
   // Initialize state from localStorage if available
   const [items, setItems] = useState<OrderItem[]>(() => {

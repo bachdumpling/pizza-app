@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -31,6 +31,62 @@ import StatusBadge from "../ui/StatusBadge";
 
 const LOCATION_ID = import.meta.env.VITE_LOCATION_ID;
 
+/**
+ * EmployeeDashboard component is responsible for displaying and managing pizza orders.
+ * It fetches the orders from the API, displays them in a table, and allows updating the order status.
+ *
+ * @component
+ * @example
+ * return (
+ *   <EmployeeDashboard />
+ * )
+ *
+ * @remarks
+ * This component uses the `useState` and `useEffect` hooks to manage state and side effects.
+ * It also handles API calls to fetch and update orders using the `pizzaApi` service.
+ *
+ * @returns {JSX.Element} The rendered component.
+ *
+ * @function
+ * @name EmployeeDashboard
+ *
+ * @typedef {Object} HiringFrontendTakeHomeOrderResponse
+ * @property {string} id - The unique identifier for the order.
+ * @property {Object} customer - The customer who placed the order.
+ * @property {string} customer.firstName - The first name of the customer.
+ * @property {string} customer.lastName - The last name of the customer.
+ * @property {number} totalAmount - The total amount of the order.
+ * @property {Date} createdAt - The date when the order was created.
+ * @property {HiringFrontendTakeHomeOrderStatus} status - The current status of the order.
+ *
+ * @typedef {('pending' | 'preparing' | 'ready' | 'delivered' | 'cancelled')} HiringFrontendTakeHomeOrderStatus
+ *
+ * @typedef {Object} pizzaApi
+ * @property {Function} getAllOrders - Fetches all orders for a given location.
+ * @property {Function} updateOrderStatus - Updates the status of a specific order.
+ *
+ * @param {string} LOCATION_ID - The ID of the location for which to fetch orders.
+ *
+ * @hook
+ * @name useState
+ * @description Manages the state of orders, loading status, and error messages.
+ *
+ * @hook
+ * @name useEffect
+ * @description Fetches orders when the component mounts.
+ *
+ * @async
+ * @function
+ * @name fetchOrders
+ * @description Fetches orders from the API and updates the state.
+ *
+ * @async
+ * @function
+ * @name handleStatusUpdate
+ * @description Updates the status of an order and refreshes the order list.
+ *
+ * @returns {JSX.Element} The rendered component, including a loading state, error messages, and a table of orders.
+ */
 function EmployeeDashboard() {
   const [orders, setOrders] = useState<HiringFrontendTakeHomeOrderResponse[]>(
     []
